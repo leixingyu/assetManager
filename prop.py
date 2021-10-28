@@ -6,8 +6,10 @@ MODULE_PATH = os.path.dirname(__file__)
 FOLDER_NAME = r'props-library'
 SCREENSHOT_PATH = r'screenshot'
 
+# TODO: the name currently includes extension, try to steer away from that.
 
-class Props(object):
+
+class Prop(object):
 
     def __init__(self, name, dir):
 
@@ -16,7 +18,9 @@ class Props(object):
         if os.path.isfile(os.path.join(dir, self._name)):
             self._dir = dir
         else:
-            raise NameError
+            raise NameError('no file found: {}'.format(
+                os.path.join(dir, self._name)
+            ))
 
         self._file = os.path.join(self._dir, self._name)
 
@@ -33,7 +37,9 @@ class Props(object):
         for f in files:
             name, ext = os.path.splitext(f)
             if ext in ['.ma', '.mb']:
-                props.append(cls(f, dir))
+
+                item = cls(f, dir)
+                props.append(item)
 
         return props
 

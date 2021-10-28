@@ -7,6 +7,7 @@ from utility.util import video
 
 
 def save(mfile):
+    # rename in this case reflects save as behavior
     cmds.file(rename=mfile)
 
     if cmds.ls(selection=1):
