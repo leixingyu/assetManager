@@ -1,34 +1,20 @@
 import logging
 import os
 
-import prop
-import createEntryDialog
+import asset
+import createEntryUI
 import util
 
 from utility._vendor.Qt import QtWidgets, QtCore, QtGui
 from utility.util import ui
 
-"""
-API
 
-practical use would be to load a controller
-
-1. use the controller name to initialize a controller object
-
-c = controller.Controller('star.ma')
-
-2. instantiate a ManagerUI object
-
-manager = managerUI.ManagerUI()
-manager.load(c)
-
-"""
-
-
-class ManagerUI(QtWidgets.QMainWindow):
+class Manager(object):
 
     def __init__(self):
-        super(ManagerUI, self).__init__()
+        super(Manager, self).__init__()
+
+        self._dir = None
 
     def populate(self):
         pass
@@ -37,7 +23,7 @@ class ManagerUI(QtWidgets.QMainWindow):
         pass
 
     def get_current_item(self):
-        return prop.Prop()
+        return asset.Asset()
 
     def open(self, item=None):
         if not item:
@@ -50,12 +36,13 @@ class ManagerUI(QtWidgets.QMainWindow):
         util.load(item.file)
 
     def delete_entry(self):
-        user_choice = ui.prompt_message_choose("Delete the current entry?")
+        item = self.get_current_item()
+
+        user_choice = ui.prompt_message_choose("Delete the entry: {}?".format(item.name))
         if user_choice == QtWidgets.QMessageBox.No:
             return
 
         # delete the prop entry
-        item = self.get_current_item()
         try:
             os.remove(item.file)
             os.remove(item.screenshot)
@@ -72,7 +59,7 @@ class ManagerUI(QtWidgets.QMainWindow):
             if not cmds.ls(selection=1):
                 logging.error("Nothing selected")
 
-        dialog = createEntryDialog.CreateEntryDialog()
+        dialog = createEntryUI.CreateEntryDialog()
         if dialog.exec_():
             name = dialog.get_name()
 

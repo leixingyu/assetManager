@@ -3,23 +3,23 @@ import os
 import util
 
 MODULE_PATH = os.path.dirname(__file__)
-FOLDER_NAME = r'props-library'
+FOLDER_NAME = r'assets-library'
 SCREENSHOT_PATH = r'screenshot'
 
 # TODO: the name currently includes extension, try to steer away from that.
 
 
-class Prop(object):
+class Asset(object):
 
-    def __init__(self, name, dir):
+    def __init__(self, name, directory):
 
         self._name = name
 
-        if os.path.isfile(os.path.join(dir, self._name)):
-            self._dir = dir
+        if os.path.isfile(os.path.join(directory, self._name)):
+            self._dir = directory
         else:
             raise NameError('no file found: {}'.format(
-                os.path.join(dir, self._name)
+                os.path.join(directory, self._name)
             ))
 
         self._file = os.path.join(self._dir, self._name)
@@ -32,16 +32,16 @@ class Prop(object):
 
     @classmethod
     def get_from_dir(cls, dir=os.path.join(MODULE_PATH, FOLDER_NAME)):
-        props = list()
+        assets = list()
         files = os.listdir(dir)
         for f in files:
             name, ext = os.path.splitext(f)
             if ext in ['.ma', '.mb']:
 
                 item = cls(f, dir)
-                props.append(item)
+                assets.append(item)
 
-        return props
+        return assets
 
     @property
     def name(self):

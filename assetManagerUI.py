@@ -1,26 +1,26 @@
 import os
 
-import prop
-import managerUI
+import asset
+import manager
 
 from utility._vendor.Qt import QtWidgets, QtCore, QtGui
 from utility._vendor.Qt import _loadUi
 
 
 MODULE_PATH = os.path.dirname(__file__)
-UI_FILE = r'main.ui'
+UI_FILE = r'ui/asset.ui'
 
 ICON_SIZE = 220
 
 
-class PropsManagerUI(managerUI.ManagerUI):
+class AssetManagerUI(manager.Manager, QtWidgets.QMainWindow):
 
     def __init__(self, dir=None):
-        super(PropsManagerUI, self).__init__()
+        super(AssetManagerUI, self).__init__()
 
         _loadUi(os.path.join(MODULE_PATH, UI_FILE), self)
 
-        self._dir = dir or os.path.join(MODULE_PATH, 'props-library')
+        self._dir = dir or os.path.join(MODULE_PATH, 'assets-library')
         self._props = None
         self.get_props()
 
@@ -65,7 +65,7 @@ class PropsManagerUI(managerUI.ManagerUI):
         self.force_refresh()
 
     def get_props(self):
-        self._props = prop.Prop.get_from_dir(self._dir)
+        self._props = asset.Asset.get_from_dir(self._dir)
 
     def populate(self):
         self.ui_list_widget.clear()
@@ -111,7 +111,7 @@ class PropsManagerUI(managerUI.ManagerUI):
 
 def show():
     global window
-    window = PropsManagerUI()
+    window = AssetManagerUI()
     window.show()
     return window
 
