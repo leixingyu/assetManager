@@ -1,3 +1,4 @@
+import logging
 import os
 
 import shape
@@ -5,6 +6,8 @@ import manager
 
 from utility._vendor.Qt import QtWidgets, QtCore, QtGui
 from utility._vendor.Qt import _loadUi
+from utility.rigging import nurbs
+from utility.util import ui
 
 
 MODULE_PATH = os.path.dirname(__file__)
@@ -30,7 +33,7 @@ class ShapeManagerUI(manager.Manager, QtWidgets.QMainWindow):
         self.ui_shape_widget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui_shape_widget.customContextMenuRequested.connect(self.open_context_menu)
 
-        self.ui_add_btn.clicked.connect(self.create_entry)
+        self.ui_add_btn.clicked.connect(self.create)
         self.ui_icon_slider.valueChanged.connect(self.resize_icon)
 
     def open_context_menu(self):
@@ -75,6 +78,35 @@ class ShapeManagerUI(manager.Manager, QtWidgets.QMainWindow):
         value = self.ui_icon_slider.value()
         self.icon_size = value
         self.ui_shape_widget.setIconSize(QtCore.QSize(self.icon_size, self.icon_size))
+
+    def validate_scene(self):
+        import maya.cmds as cmds
+
+        sl = cmds.ls(selection=1)
+
+        if not sl:
+            logging.error("Nothing selected in scene")
+            msg = "Please select curves to save"
+            ui.prompt_message_log(message=msg, ltype='error', title="Create Fail")
+
+        # have curve all combined under one transform and rename
+        result_curve = nurbs.merge_curves(name=shape.Shape.curve)
+
+        if not result_curve:
+            msg = "Can't merge the selected for export, are they nurbs curve?"
+            ui.prompt_message_log(message=msg, ltype='error', title="Merge Fail")
+
+        root = cmds.group(name=shape.Shape.offset, em=1)
+        cmds.parent(result_curve, root)
+
+        # select that group to use selection mode flex save
+        cmds.select(clear=1)
+        cmds.select(root)
+
+    def create(self):
+        self.validate_scene()
+        self.create_entry()
+        ui.prompt_message_log("Creation Success", ltype='info')
 
 
 def show():

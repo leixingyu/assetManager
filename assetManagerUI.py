@@ -1,3 +1,4 @@
+import logging
 import os
 
 import asset
@@ -5,6 +6,7 @@ import manager
 
 from utility._vendor.Qt import QtWidgets, QtCore, QtGui
 from utility._vendor.Qt import _loadUi
+from utility.util import ui
 
 
 MODULE_PATH = os.path.dirname(__file__)
@@ -35,8 +37,8 @@ class AssetManagerUI(manager.Manager, QtWidgets.QMainWindow):
 
         self.ui_delete_btn.clicked.connect(self.delete_entry)
 
-        self.ui_create_scene_action.triggered.connect(lambda: self.create_entry(mode='scene'))
-        self.ui_create_sel_action.triggered.connect(lambda: self.create_entry(mode='selection'))
+        self.ui_create_scene_action.triggered.connect(lambda: self.create(mode='scene'))
+        self.ui_create_sel_action.triggered.connect(lambda: self.create(mode='selection'))
         self.ui_set_dir_action.triggered.connect(self.set_dir)
 
     def sort_by_name(self):
@@ -107,6 +109,20 @@ class AssetManagerUI(manager.Manager, QtWidgets.QMainWindow):
         if not item:
             raise ValueError("No item selected for action")
         return item.data(QtCore.Qt.UserRole)
+
+    def validate_scene(self, mode):
+        import maya.cmds as cmds
+
+        if mode != 'selection':
+            cmds.select(clear=1)
+        else:
+            if not cmds.ls(selection=1):
+                logging.error("Nothing selected")
+
+    def create(self, mode):
+        self.validate_scene(mode=mode)
+        self.create_entry()
+        ui.prompt_message_log("Creation Success", ltype='info')
 
 
 def show():

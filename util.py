@@ -6,7 +6,7 @@ from utility.file import info
 from utility.util import video
 
 
-def save(mfile):
+def flex_save(mfile):
     # rename in this case reflects save as behavior
     cmds.file(rename=mfile)
 

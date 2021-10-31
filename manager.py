@@ -9,6 +9,8 @@ from utility._vendor.Qt import QtWidgets, QtCore, QtGui
 from utility.util import ui
 
 
+# TODO: consider not using manager as asset and shape are diverging
+
 class Manager(object):
 
     def __init__(self):
@@ -50,22 +52,20 @@ class Manager(object):
         except Exception as e:
             logging.error("deletion interrupted: %s", e)
 
-    def create_entry(self, mode='scene'):
-        import maya.cmds as cmds
+    def validate_scene(self, **kwargs):
+        pass
 
-        if mode != 'selection':
-            cmds.select(clear=1)
-        else:
-            if not cmds.ls(selection=1):
-                logging.error("Nothing selected")
+    def unify_scene(self):
+        pass
 
+    def create_entry(self):
         dialog = createEntryUI.CreateEntryDialog()
         if dialog.exec_():
             name = dialog.get_name()
 
             file_path = os.path.join(self._dir, name)
             screenshot_path = os.path.join(self._dir, 'screenshot')
-            util.save(file_path)
+            util.flex_save(file_path)
             util.save_screenshot(screenshot_path, name)
 
             self.force_refresh()

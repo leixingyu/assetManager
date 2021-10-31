@@ -14,13 +14,12 @@ class Asset(object):
     def __init__(self, name, directory):
 
         self._name = name
+        self._dir = directory
 
-        if os.path.isfile(os.path.join(directory, self._name)):
-            self._dir = directory
-        else:
-            raise NameError('no file found: {}'.format(
-                os.path.join(directory, self._name)
-            ))
+        if not os.path.isfile(os.path.join(directory, self._name)):
+            raise NameError('file {} cannot be found in {}'.format(
+                self.name, directory)
+            )
 
         self._file = os.path.join(self._dir, self._name)
 
@@ -31,17 +30,31 @@ class Asset(object):
         self._user = self.get_user()
 
     @classmethod
-    def get_from_dir(cls, dir=os.path.join(MODULE_PATH, FOLDER_NAME)):
+    def get_from_dir(cls, directory):
         assets = list()
-        files = os.listdir(dir)
+        files = cls.list_from_dir(directory)
+        for f in files:
+            item = cls(f, directory)
+            assets.append(item)
+
+        return assets
+
+    @classmethod
+    def list_from_dir(cls, directory):
+        """
+
+        :param directory:
+        :return: list. asset short names
+        """
+        asset_files = list()
+        files = os.listdir(directory)
         for f in files:
             name, ext = os.path.splitext(f)
             if ext in ['.ma', '.mb']:
+                asset_files.append(f)
 
-                item = cls(f, dir)
-                assets.append(item)
-
-        return assets
+        print(asset_files)
+        return asset_files
 
     @property
     def name(self):

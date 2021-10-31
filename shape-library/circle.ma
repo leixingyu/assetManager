@@ -1,6 +1,6 @@
 //Maya ASCII 2018 scene
-//Name: square.ma
-//Last modified: Sat, Oct 30, 2021 08:04:16 PM
+//Name: circle.ma
+//Last modified: Sat, Oct 30, 2021 08:01:47 PM
 //Codeset: 936
 requires maya "2018";
 requires "mtoa" "3.2.0.2";
@@ -11,27 +11,15 @@ fileInfo "version" "2018";
 fileInfo "cutIdentifier" "201706261615-f9658c4cfc";
 fileInfo "osv" "Microsoft Windows 8 Home Premium Edition, 64-bit  (Build 9200)\n";
 createNode transform -n "curve_root";
-	rename -uid "B7DA0223-4696-A2B9-A2F7-9C887CA3CE89";
+	rename -uid "7E09E7CE-494D-0D15-5CA2-779CDC1A16DD";
 createNode transform -n "main" -p "curve_root";
-	rename -uid "A7BF2431-4389-7E02-4290-89AAAC725F86";
-createNode nurbsCurve -n "leftnurbsSquareShape1" -p "main";
-	rename -uid "8E678B7E-4498-030E-1015-82A5ECEEF333";
+	rename -uid "D8035CAF-4E61-E41B-269C-A583350D6639";
+createNode nurbsCurve -n "nurbsCircleShape1" -p "main";
+	rename -uid "9DBA9090-48F9-68B5-2243-12ABBAB7F40F";
 	setAttr -k off ".v";
 	setAttr ".tw" yes;
-createNode nurbsCurve -n "rightnurbsSquareShape1" -p "main";
-	rename -uid "68FD2098-4BF2-0B28-6C97-B9BF3ACD750E";
-	setAttr -k off ".v";
-	setAttr ".tw" yes;
-createNode nurbsCurve -n "topnurbsSquareShape1" -p "main";
-	rename -uid "B19FAFDD-4DB7-7F48-5FF5-2D97B5005525";
-	setAttr -k off ".v";
-	setAttr ".tw" yes;
-createNode nurbsCurve -n "bottomnurbsSquareShape1" -p "main";
-	rename -uid "86C2B3D0-4D7A-FAA2-1FD4-F2ADDBAA9337";
-	setAttr -k off ".v";
-	setAttr ".tw" yes;
-createNode makeNurbsSquare -n "makeNurbsSquare1";
-	rename -uid "66FED3EC-4853-285B-3AB9-36AD79D79D8B";
+createNode makeNurbCircle -n "makeNurbCircle1";
+	rename -uid "0480ECA1-4DF4-4949-356B-C3A0A7D0F85E";
 	setAttr ".nr" -type "double3" 0 1 0 ;
 select -ne :time1;
 	setAttr ".o" 1;
@@ -61,8 +49,7 @@ select -ne :defaultResolution;
 select -ne :hardwareRenderGlobals;
 	setAttr ".ctrs" 256;
 	setAttr ".btrs" 512;
-connectAttr "makeNurbsSquare1.oc2" "leftnurbsSquareShape1.cr";
-connectAttr "makeNurbsSquare1.oc4" "rightnurbsSquareShape1.cr";
-connectAttr "makeNurbsSquare1.oc1" "topnurbsSquareShape1.cr";
-connectAttr "makeNurbsSquare1.oc3" "bottomnurbsSquareShape1.cr";
-// End of square.ma
+select -ne :ikSystem;
+	setAttr -s 4 ".sol";
+connectAttr "makeNurbCircle1.oc" "nurbsCircleShape1.cr";
+// End of circle.ma
