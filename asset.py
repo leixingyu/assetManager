@@ -1,46 +1,63 @@
+import logging
 import os
 
 import util
 
-MODULE_PATH = os.path.dirname(__file__)
-FOLDER_NAME = r'assets-library'
-SCREENSHOT_PATH = r'screenshot'
+# this is the root where the tool tries to find all the assets and screenshots
+# either hard code the full path or use env variable to set it
+ROOT_PATH = ''
+if not ROOT_PATH:
+    ROOT_PATH = os.path.dirname(__file__)
 
-# TODO: the name currently includes extension, try to steer away from that.
+ASSET_PATH = os.path.join(ROOT_PATH, 'asset-library')
+
+# we should use ma and stay away from mb completely
+MAYA_EXT = '.ma'
 
 
 class Asset(object):
 
-    def __init__(self, name, directory):
+    def __init__(self, name, directory=ASSET_PATH):
+
+        if not os.path.isfile(os.path.join(directory, name+'.ma')):
+            logging.error('file % cannot be found in %', name+'.ma', directory)
 
         self._name = name
         self._dir = directory
+        self._file = os.path.join(self._dir, self._name+'.ma')
 
-        if not os.path.isfile(os.path.join(directory, self._name)):
-            raise NameError('file {} cannot be found in {}'.format(
-                self.name, directory)
-            )
+        self._sdir = os.path.join(self._dir, 'screenshot')
+        self._screenshot = os.path.join(self._sdir, self._name+'.jpg')
 
-        self._file = os.path.join(self._dir, self._name)
-
-        self._screenshot = self.get_screenshot()
         self._size = self.get_size()
         self._mtime = self.get_mtime()
         self._ctime = self.get_ctime()
-        self._user = self.get_user()
+        self._user = None
 
     @classmethod
-    def get_from_dir(cls, directory):
+    def save(cls, name, directory):
+        import maya.cmds as cmds
+        from utility.util import video
+
+        cmds.file(rename=os.path.join(directory, name))
+        cmds.file(save=1, type='mayaAscii', force=1)
+        item = cls(name, directory)
+        video.take_maya_screenshot(item._sdir, item._name)
+
+        return item
+
+    @classmethod
+    def get_from_dir(cls, directory=ASSET_PATH):
         assets = list()
-        files = cls.list_from_dir(directory)
-        for f in files:
-            item = cls(f, directory)
+        names = cls.list_from_dir(directory)
+        for n in names:
+            item = cls(n, directory)
             assets.append(item)
 
         return assets
 
     @classmethod
-    def list_from_dir(cls, directory):
+    def list_from_dir(cls, directory=ASSET_PATH):
         """
 
         :param directory:
@@ -50,15 +67,14 @@ class Asset(object):
         files = os.listdir(directory)
         for f in files:
             name, ext = os.path.splitext(f)
-            if ext in ['.ma', '.mb']:
-                asset_files.append(f)
+            if ext == '.ma':
+                asset_files.append(name)
 
-        print(asset_files)
         return asset_files
 
     @property
     def name(self):
-        return self._name.split('.')[0]
+        return self._name
 
     @property
     def file(self):
@@ -84,16 +100,6 @@ class Asset(object):
     def user(self):
         return self._user
 
-    def get_screenshot(self):
-        screenshot_name = '{}.jpg'.format(self.name)
-        screenshot_dir = os.path.join(self._dir, SCREENSHOT_PATH)
-
-        screenshot_file = os.path.join(screenshot_dir, screenshot_name)
-        if os.path.isfile(screenshot_file):
-            return screenshot_file
-        else:
-            return None
-
     def get_size(self):
         return util.get_msize(self._file)
 
@@ -103,6 +109,12 @@ class Asset(object):
     def get_ctime(self):
         return util.get_ctime(self._file)
 
-    def get_user(self):
-        return 'null'
+    def open(self):
+        util.open(self._file)
 
+    def load(self):
+        util.load(self._file)
+
+    def delete(self):
+        os.remove(self._file)
+        os.remove(self._screenshot)

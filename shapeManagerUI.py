@@ -2,7 +2,7 @@ import logging
 import os
 
 import shape
-import manager
+import createEntryUI
 
 from utility._vendor.Qt import QtWidgets, QtCore, QtGui
 from utility._vendor.Qt import _loadUi
@@ -14,7 +14,7 @@ MODULE_PATH = os.path.dirname(__file__)
 UI_FILE = r'ui/shape.ui'
 
 
-class ShapeManagerUI(manager.Manager, QtWidgets.QMainWindow):
+class ShapeManagerUI(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(ShapeManagerUI, self).__init__()
@@ -105,8 +105,40 @@ class ShapeManagerUI(manager.Manager, QtWidgets.QMainWindow):
 
     def create(self):
         self.validate_scene()
-        self.create_entry()
+
+        dialog = createEntryUI.CreateEntryDialog()
+        if dialog.exec_():
+            name = dialog.get_name()
+            item = shape.Shape.save(name, self._dir)
+
+        self.force_refresh()
         ui.prompt_message_log("Creation Success", ltype='info')
+
+    def open(self, item=None):
+        if not item:
+            item = self.get_current_item()
+        item.open()
+
+    def load(self, item=None):
+        if not item:
+            item = self.get_current_item()
+        item.load()
+
+    def delete_entry(self):
+        item = self.get_current_item()
+
+        user_choice = ui.prompt_message_choose(
+            "Delete the entry: {}?".format(item.name))
+        if user_choice == QtWidgets.QMessageBox.No:
+            return
+
+        # delete the prop entry
+        try:
+            item.delete()
+        except Exception as e:
+            logging.error("deletion interrupted: %s", e)
+
+        self.force_refresh()
 
 
 def show():

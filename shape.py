@@ -15,7 +15,7 @@ SCREENSHOT_PATH = r'screenshot'
 API: practical use would be to load a controller shape
 c = shape.Shape('circle.ma')
 c.thickness = 4
-c.size = 2
+c.scale = 2
 c.load()
 """
 
@@ -46,12 +46,12 @@ class Shape(asset.Asset):
             self._color = col
 
     @property
-    def size(self):
+    def scale(self):
         return self._size
 
-    @size.setter
-    def size(self, size):
-        self._size = size
+    @scale.setter
+    def scale(self, scale):
+        self._size = scale
 
     @property
     def thickness(self):
@@ -62,13 +62,13 @@ class Shape(asset.Asset):
         self._thickness = thickness
 
     def colorize(self):
-        nurbs.colorize_rgb(self._curve, self._color.r, self._color.g, self._color.b)
+        nurbs.colorize_rgb(self.curve, self._color.r, self._color.g, self._color.b)
 
     def resize(self):
-        cmds.scale(self._size, self._size, self._size, self._curve)
+        cmds.scale(self._scale, self._scale, self._scale, self.curve)
 
     def thicken(self):
-        cmds.setAttr('{}.lineWidth'.format(self._curve), self.thickness)
+        cmds.setAttr('{}.lineWidth'.format(self.curve), self.thickness)
 
     def face(self, direction):
         pass

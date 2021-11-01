@@ -1,9 +1,10 @@
 import logging
 import os
 
-import asset
-import manager
+import maya.cmds as cmds
 
+import asset
+import createEntryUI
 from utility._vendor.Qt import QtWidgets, QtCore, QtGui
 from utility._vendor.Qt import _loadUi
 from utility.util import ui
@@ -15,55 +16,37 @@ UI_FILE = r'ui/asset.ui'
 ICON_SIZE = 220
 
 
-class AssetManagerUI(manager.Manager, QtWidgets.QMainWindow):
+class AssetManagerUI(QtWidgets.QMainWindow):
 
-    def __init__(self, dir=None):
+    def __init__(self, directory=asset.ASSET_PATH):
         super(AssetManagerUI, self).__init__()
-
         _loadUi(os.path.join(MODULE_PATH, UI_FILE), self)
 
-        self._dir = dir or os.path.join(MODULE_PATH, 'assets-library')
+        self._dir = directory
         self._props = None
-        self.get_props()
 
-        self.sort_by_date()
+        self.force_refresh()
 
+        # set gui properties
         self.ui_info_widget.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
 
+        # connect signals and slots
         self.ui_list_widget.itemClicked.connect(self.display_detail)
-
         self.ui_open_btn.clicked.connect(self.open)
         self.ui_import_btn.clicked.connect(self.load)
-
         self.ui_delete_btn.clicked.connect(self.delete_entry)
-
         self.ui_create_scene_action.triggered.connect(lambda: self.create(mode='scene'))
         self.ui_create_sel_action.triggered.connect(lambda: self.create(mode='selection'))
         self.ui_set_dir_action.triggered.connect(self.set_dir)
 
-    def sort_by_name(self):
-        # TODO: insert sorting logic
-
-        self.populate()
-
-    def sort_by_date(self):
-        # TODO: insert sorting logic
-
-        self.populate()
-
-    def sort_by_size(self):
-        # TODO: insert sorting logic
-
-        self.populate()
-
     def set_dir(self):
-        dir = QtWidgets.QFileDialog.getExistingDirectory(
+        directory = QtWidgets.QFileDialog.getExistingDirectory(
             None,
             "Set base directory",
             MODULE_PATH
         )
 
-        self._dir = dir
+        self._dir = directory
         self.force_refresh()
 
     def get_props(self):
@@ -111,7 +94,6 @@ class AssetManagerUI(manager.Manager, QtWidgets.QMainWindow):
         return item.data(QtCore.Qt.UserRole)
 
     def validate_scene(self, mode):
-        import maya.cmds as cmds
 
         if mode != 'selection':
             cmds.select(clear=1)
@@ -121,8 +103,40 @@ class AssetManagerUI(manager.Manager, QtWidgets.QMainWindow):
 
     def create(self, mode):
         self.validate_scene(mode=mode)
-        self.create_entry()
+
+        dialog = createEntryUI.CreateEntryDialog()
+        if dialog.exec_():
+            name = dialog.get_name()
+            item = asset.Asset.save(name, self._dir)
+
+        self.force_refresh()
         ui.prompt_message_log("Creation Success", ltype='info')
+
+    def open(self, item=None):
+        if not item:
+            item = self.get_current_item()
+        item.open()
+
+    def load(self, item=None):
+        if not item:
+            item = self.get_current_item()
+        item.load()
+
+    def delete_entry(self):
+        item = self.get_current_item()
+
+        user_choice = ui.prompt_message_choose(
+            "Delete the entry: {}?".format(item.name))
+        if user_choice == QtWidgets.QMessageBox.No:
+            return
+
+        # delete the prop entry
+        try:
+            item.delete()
+        except Exception as e:
+            logging.error("deletion interrupted: %s", e)
+
+        self.force_refresh()
 
 
 def show():
