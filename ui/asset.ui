@@ -24,25 +24,6 @@
        <item row="1" column="0" colspan="4">
         <widget class="QListWidget" name="ui_list_widget"/>
        </item>
-       <item row="0" column="0" colspan="4">
-        <widget class="QComboBox" name="ui_sort_cbox">
-         <item>
-          <property name="text">
-           <string>Date</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Name</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Size</string>
-          </property>
-         </item>
-        </widget>
-       </item>
        <item row="2" column="2">
         <widget class="QPushButton" name="ui_delete_btn">
          <property name="text">
@@ -92,7 +73,6 @@
      <string>Create</string>
     </property>
     <addaction name="ui_create_scene_action"/>
-    <addaction name="ui_create_sel_action"/>
    </widget>
    <addaction name="menuCreate"/>
    <addaction name="menuDebug"/>

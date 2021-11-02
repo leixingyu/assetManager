@@ -20,11 +20,13 @@ c.load()
 """
 
 
+# TODO: get rid of the offset group entirely, add rename when import
+
 class Shape(asset.Asset):
 
     # every shape asset should have the same offset group and transform name
-    offset = 'curve_root'
-    curve = 'main'
+    offset = 'root'
+    transform = 'main'
 
     def __init__(self, name, directory=os.path.join(MODULE_PATH, FOLDER_NAME)):
 
@@ -62,19 +64,25 @@ class Shape(asset.Asset):
         self._thickness = thickness
 
     def colorize(self):
-        nurbs.colorize_rgb(self.curve, self._color.r, self._color.g, self._color.b)
+        nurbs.colorize_rgb(self.transform, self._color.r, self._color.g, self._color.b)
 
     def resize(self):
-        cmds.scale(self._scale, self._scale, self._scale, self.curve)
+        cmds.scale(self._scale, self._scale, self._scale, self.transform)
 
     def thicken(self):
-        cmds.setAttr('{}.lineWidth'.format(self.curve), self.thickness)
+        cmds.setAttr('{}.lineWidth'.format(self.transform), self.thickness)
 
     def face(self, direction):
         pass
 
-    def load(self):
+    def load(self, name=None):
         util.load(self._file)
+
+        if not name:
+            name = 'temp'
+
+        cmds.rename(self.offset, name+'_offset')
+        cmds.rename(self.transform, name)
 
         self.colorize()
         self.resize()

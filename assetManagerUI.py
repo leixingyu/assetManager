@@ -15,6 +15,8 @@ UI_FILE = r'ui/asset.ui'
 
 ICON_SIZE = 220
 
+# TODO: get rid of selection save mode
+
 
 class AssetManagerUI(QtWidgets.QMainWindow):
 
@@ -35,8 +37,7 @@ class AssetManagerUI(QtWidgets.QMainWindow):
         self.ui_open_btn.clicked.connect(self.open)
         self.ui_import_btn.clicked.connect(self.load)
         self.ui_delete_btn.clicked.connect(self.delete_entry)
-        self.ui_create_scene_action.triggered.connect(lambda: self.create(mode='scene'))
-        self.ui_create_sel_action.triggered.connect(lambda: self.create(mode='selection'))
+        self.ui_create_scene_action.triggered.connect(self.create_entry)
         self.ui_set_dir_action.triggered.connect(self.set_dir)
 
     def set_dir(self):
@@ -93,25 +94,6 @@ class AssetManagerUI(QtWidgets.QMainWindow):
             raise ValueError("No item selected for action")
         return item.data(QtCore.Qt.UserRole)
 
-    def validate_scene(self, mode):
-
-        if mode != 'selection':
-            cmds.select(clear=1)
-        else:
-            if not cmds.ls(selection=1):
-                logging.error("Nothing selected")
-
-    def create(self, mode):
-        self.validate_scene(mode=mode)
-
-        dialog = createEntryUI.CreateEntryDialog()
-        if dialog.exec_():
-            name = dialog.get_name()
-            item = asset.Asset.save(name, self._dir)
-
-        self.force_refresh()
-        ui.prompt_message_log("Creation Success", ltype='info')
-
     def open(self, item=None):
         if not item:
             item = self.get_current_item()
@@ -121,6 +103,15 @@ class AssetManagerUI(QtWidgets.QMainWindow):
         if not item:
             item = self.get_current_item()
         item.load()
+
+    def create_entry(self):
+        dialog = createEntryUI.CreateEntryDialog()
+        if dialog.exec_():
+            name = dialog.get_name()
+            item = asset.Asset.save(name, self._dir)
+
+        self.force_refresh()
+        ui.prompt_message_log("Creation Success", ltype='info')
 
     def delete_entry(self):
         item = self.get_current_item()

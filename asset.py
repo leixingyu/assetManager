@@ -40,7 +40,10 @@ class Asset(object):
         from utility.util import video
 
         cmds.file(rename=os.path.join(directory, name))
-        cmds.file(save=1, type='mayaAscii', force=1)
+        if not cmds.ls(selection=1):
+            cmds.file(save=1, type='mayaAscii', force=1)
+        else:
+            cmds.file(exportSelected=1, type='mayaAscii', force=1)
         item = cls(name, directory)
         video.take_maya_screenshot(item._sdir, item._name)
 

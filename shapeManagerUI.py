@@ -8,6 +8,8 @@ from utility._vendor.Qt import QtWidgets, QtCore, QtGui
 from utility._vendor.Qt import _loadUi
 from utility.rigging import nurbs
 from utility.util import ui
+from utility.setup import outliner, setup
+reload(setup)
 
 
 MODULE_PATH = os.path.dirname(__file__)
@@ -23,16 +25,18 @@ class ShapeManagerUI(QtWidgets.QMainWindow):
 
         self._dir = os.path.join(MODULE_PATH, 'shape-library')
         self._shapes = None
-        self.get_shapes()
 
-        self.populate()
+        self.force_refresh()
 
+        # gui property
         self.icon_size = 150
         self.ui_shape_widget.setIconSize(QtCore.QSize(self.icon_size, self.icon_size))
 
+        # context menu setup
         self.ui_shape_widget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui_shape_widget.customContextMenuRequested.connect(self.open_context_menu)
 
+        # connect signal and slot
         self.ui_add_btn.clicked.connect(self.create)
         self.ui_icon_slider.valueChanged.connect(self.resize_icon)
 
@@ -79,40 +83,37 @@ class ShapeManagerUI(QtWidgets.QMainWindow):
         self.icon_size = value
         self.ui_shape_widget.setIconSize(QtCore.QSize(self.icon_size, self.icon_size))
 
-    def validate_scene(self):
+    def create(self):
         import maya.cmds as cmds
 
-        sl = cmds.ls(selection=1)
-
-        if not sl:
+        if not cmds.ls(selection=1):
             logging.error("Nothing selected in scene")
             msg = "Please select curves to save"
             ui.prompt_message_log(message=msg, ltype='error', title="Create Fail")
-
-        # have curve all combined under one transform and rename
-        result_curve = nurbs.merge_curves(name=shape.Shape.curve)
-
-        if not result_curve:
-            msg = "Can't merge the selected for export, are they nurbs curve?"
-            ui.prompt_message_log(message=msg, ltype='error', title="Merge Fail")
-
-        root = cmds.group(name=shape.Shape.offset, em=1)
-        cmds.parent(result_curve, root)
-
-        # select that group to use selection mode flex save
-        cmds.select(clear=1)
-        cmds.select(root)
-
-    def create(self):
-        self.validate_scene()
+            return
 
         dialog = createEntryUI.CreateEntryDialog()
         if dialog.exec_():
             name = dialog.get_name()
-            item = shape.Shape.save(name, self._dir)
 
-        self.force_refresh()
-        ui.prompt_message_log("Creation Success", ltype='info')
+            @setup.undo
+            def merge_curve():
+                # have curve all combined under one transform and rename
+                result_curve = nurbs.merge_curves(name=shape.Shape.transform)
+                root = cmds.group(name=shape.Shape.offset, em=1)
+                cmds.parent(result_curve, root)
+
+                # select that group to use selection mode flex save
+                cmds.select(clear=1)
+                cmds.select(root)
+                shape.Shape.save(name, self._dir)
+
+            merge_curve()
+
+            self.force_refresh()
+            ui.prompt_message_log("Creation Success", ltype='info')
+        else:
+            ui.prompt_message_log("Aborted!", ltype='info')
 
     def open(self, item=None):
         if not item:
