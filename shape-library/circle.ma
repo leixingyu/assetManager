@@ -1,6 +1,6 @@
 //Maya ASCII 2018 scene
 //Name: circle.ma
-//Last modified: Sat, Oct 30, 2021 08:01:47 PM
+//Last modified: Tue, Nov 02, 2021 11:30:57 PM
 //Codeset: 936
 requires maya "2018";
 requires "mtoa" "3.2.0.2";
@@ -10,17 +10,29 @@ fileInfo "product" "Maya 2018";
 fileInfo "version" "2018";
 fileInfo "cutIdentifier" "201706261615-f9658c4cfc";
 fileInfo "osv" "Microsoft Windows 8 Home Premium Edition, 64-bit  (Build 9200)\n";
-createNode transform -n "curve_root";
-	rename -uid "7E09E7CE-494D-0D15-5CA2-779CDC1A16DD";
-createNode transform -n "main" -p "curve_root";
-	rename -uid "D8035CAF-4E61-E41B-269C-A583350D6639";
+createNode transform -n "root";
+	rename -uid "54BC6E0A-4421-52AB-19BB-0E924DB50AE6";
+createNode transform -n "main" -p "root";
+	rename -uid "FC168F27-48B8-7359-506A-FC877818E523";
 createNode nurbsCurve -n "nurbsCircleShape1" -p "main";
-	rename -uid "9DBA9090-48F9-68B5-2243-12ABBAB7F40F";
+	rename -uid "9B6E388A-42D3-BD8C-F36C-7689771511EA";
 	setAttr -k off ".v";
-	setAttr ".tw" yes;
-createNode makeNurbCircle -n "makeNurbCircle1";
-	rename -uid "0480ECA1-4DF4-4949-356B-C3A0A7D0F85E";
-	setAttr ".nr" -type "double3" 0 1 0 ;
+	setAttr ".cc" -type "nurbsCurve" 
+		3 8 2 no 3
+		13 -2 -1 0 1 2 3 4 5 6 7 8 9 10
+		11
+		0.78361162489122449 4.7982373409884731e-17 -0.7836116248912246
+		6.7857323231109122e-17 6.7857323231109122e-17 -1.1081941875543877
+		-0.78361162489122449 4.7982373409884719e-17 -0.78361162489122438
+		-1.1081941875543881 3.5177356190060272e-33 -5.7448982375248304e-17
+		-0.78361162489122449 -4.7982373409884725e-17 0.78361162489122449
+		-1.1100856969603225e-16 -6.7857323231109171e-17 1.1081941875543884
+		0.78361162489122449 -4.7982373409884719e-17 0.78361162489122438
+		1.1081941875543881 -9.2536792101100989e-33 1.511240500779959e-16
+		0.78361162489122449 4.7982373409884731e-17 -0.7836116248912246
+		6.7857323231109122e-17 6.7857323231109122e-17 -1.1081941875543877
+		-0.78361162489122449 4.7982373409884719e-17 -0.78361162489122438
+		;
 select -ne :time1;
 	setAttr ".o" 1;
 	setAttr ".unw" 1;
@@ -49,7 +61,4 @@ select -ne :defaultResolution;
 select -ne :hardwareRenderGlobals;
 	setAttr ".ctrs" 256;
 	setAttr ".btrs" 512;
-select -ne :ikSystem;
-	setAttr -s 4 ".sol";
-connectAttr "makeNurbCircle1.oc" "nurbsCircleShape1.cr";
 // End of circle.ma

@@ -6,6 +6,7 @@ import asset
 import util
 from utility.datatype import color
 from utility.rigging import nurbs
+from utility.setup import outliner
 
 MODULE_PATH = os.path.dirname(__file__)
 FOLDER_NAME = r'shape-library'
@@ -13,14 +14,12 @@ SCREENSHOT_PATH = r'screenshot'
 
 """
 API: practical use would be to load a controller shape
-c = shape.Shape('circle.ma')
+c = shape.Shape('circle')
 c.thickness = 4
 c.scale = 2
-c.load()
+c.load(name='testCircle')
 """
 
-
-# TODO: get rid of the offset group entirely, add rename when import
 
 class Shape(asset.Asset):
 
@@ -49,11 +48,11 @@ class Shape(asset.Asset):
 
     @property
     def scale(self):
-        return self._size
+        return self._scale
 
     @scale.setter
     def scale(self, scale):
-        self._size = scale
+        self._scale = scale
 
     @property
     def thickness(self):
@@ -70,7 +69,9 @@ class Shape(asset.Asset):
         cmds.scale(self._scale, self._scale, self._scale, self.transform)
 
     def thicken(self):
-        cmds.setAttr('{}.lineWidth'.format(self.transform), self.thickness)
+        shapes = outliner.get_shape_from_transform(self.transform, check_unique_child=0)
+        for s in shapes:
+            cmds.setAttr('{}|{}.lineWidth'.format(self.transform, s), self.thickness)
 
     def face(self, direction):
         pass
@@ -78,12 +79,16 @@ class Shape(asset.Asset):
     def load(self, name=None):
         util.load(self._file)
 
+        self.colorize()
+        self.resize()
+        self.thicken()
+
         if not name:
-            name = 'temp'
+            from utility.algorithm import strGenerator
+            s = strGenerator.StrGenerator('tmp_')
+            name = s.tmp
 
         cmds.rename(self.offset, name+'_offset')
         cmds.rename(self.transform, name)
 
-        self.colorize()
-        self.resize()
-        self.thicken()
+

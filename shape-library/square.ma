@@ -1,6 +1,6 @@
 //Maya ASCII 2018 scene
 //Name: square.ma
-//Last modified: Sat, Oct 30, 2021 08:04:16 PM
+//Last modified: Tue, Nov 02, 2021 11:27:27 PM
 //Codeset: 936
 requires maya "2018";
 requires "mtoa" "3.2.0.2";
@@ -10,29 +10,58 @@ fileInfo "product" "Maya 2018";
 fileInfo "version" "2018";
 fileInfo "cutIdentifier" "201706261615-f9658c4cfc";
 fileInfo "osv" "Microsoft Windows 8 Home Premium Edition, 64-bit  (Build 9200)\n";
-createNode transform -n "curve_root";
-	rename -uid "B7DA0223-4696-A2B9-A2F7-9C887CA3CE89";
-createNode transform -n "main" -p "curve_root";
-	rename -uid "A7BF2431-4389-7E02-4290-89AAAC725F86";
-createNode nurbsCurve -n "leftnurbsSquareShape1" -p "main";
-	rename -uid "8E678B7E-4498-030E-1015-82A5ECEEF333";
-	setAttr -k off ".v";
-	setAttr ".tw" yes;
-createNode nurbsCurve -n "rightnurbsSquareShape1" -p "main";
-	rename -uid "68FD2098-4BF2-0B28-6C97-B9BF3ACD750E";
-	setAttr -k off ".v";
-	setAttr ".tw" yes;
-createNode nurbsCurve -n "topnurbsSquareShape1" -p "main";
-	rename -uid "B19FAFDD-4DB7-7F48-5FF5-2D97B5005525";
-	setAttr -k off ".v";
-	setAttr ".tw" yes;
+createNode transform -n "root";
+	rename -uid "ACB020BE-4F49-125B-EA38-7FB589B4FDF4";
+createNode transform -n "main" -p "root";
+	rename -uid "48D032FA-42A2-7CB1-A48E-A6BC372EBBDC";
 createNode nurbsCurve -n "bottomnurbsSquareShape1" -p "main";
-	rename -uid "86C2B3D0-4D7A-FAA2-1FD4-F2ADDBAA9337";
+	rename -uid "46011557-426D-569B-877E-76B4FADFCAA8";
 	setAttr -k off ".v";
-	setAttr ".tw" yes;
-createNode makeNurbsSquare -n "makeNurbsSquare1";
-	rename -uid "66FED3EC-4853-285B-3AB9-36AD79D79D8B";
-	setAttr ".nr" -type "double3" 0 1 0 ;
+	setAttr ".cc" -type "nurbsCurve" 
+		3 1 0 no 3
+		6 0 0 0 1 1 1
+		4
+		-0.49999999999999989 0 -0.5
+		-0.16666666666666657 0 -0.5
+		0.16666666666666674 0 -0.5
+		0.5 0 -0.5
+		;
+createNode nurbsCurve -n "leftnurbsSquareShape1" -p "main";
+	rename -uid "AE1B2E34-4E6C-E2AA-3D36-528074A3E25F";
+	setAttr -k off ".v";
+	setAttr ".cc" -type "nurbsCurve" 
+		3 1 0 no 3
+		6 0 0 0 1 1 1
+		4
+		-0.49999999999999989 0 0.5
+		-0.49999999999999989 0 0.16666666666666669
+		-0.49999999999999989 0 -0.16666666666666663
+		-0.49999999999999989 0 -0.49999999999999994
+		;
+createNode nurbsCurve -n "topnurbsSquareShape1" -p "main";
+	rename -uid "AD53E71F-4929-BBB8-EAA7-D78643E876B2";
+	setAttr -k off ".v";
+	setAttr ".cc" -type "nurbsCurve" 
+		3 1 0 no 3
+		6 0 0 0 1 1 1
+		4
+		0.50000000000000011 0 0.5
+		0.1666666666666668 0 0.5
+		-0.16666666666666652 0 0.5
+		-0.49999999999999983 0 0.5
+		;
+createNode nurbsCurve -n "rightnurbsSquareShape1" -p "main";
+	rename -uid "AAAA10A0-47C0-EFB8-80D3-22923A32429A";
+	setAttr -k off ".v";
+	setAttr ".cc" -type "nurbsCurve" 
+		3 1 0 no 3
+		6 0 0 0 1 1 1
+		4
+		0.50000000000000011 0 -0.5
+		0.50000000000000011 0 -0.16666666666666669
+		0.50000000000000011 0 0.16666666666666663
+		0.50000000000000011 0 0.49999999999999994
+		;
 select -ne :time1;
 	setAttr ".o" 1;
 	setAttr ".unw" 1;
@@ -61,8 +90,4 @@ select -ne :defaultResolution;
 select -ne :hardwareRenderGlobals;
 	setAttr ".ctrs" 256;
 	setAttr ".btrs" 512;
-connectAttr "makeNurbsSquare1.oc2" "leftnurbsSquareShape1.cr";
-connectAttr "makeNurbsSquare1.oc4" "rightnurbsSquareShape1.cr";
-connectAttr "makeNurbsSquare1.oc1" "topnurbsSquareShape1.cr";
-connectAttr "makeNurbsSquare1.oc3" "bottomnurbsSquareShape1.cr";
 // End of square.ma

@@ -8,8 +8,7 @@ from utility._vendor.Qt import QtWidgets, QtCore, QtGui
 from utility._vendor.Qt import _loadUi
 from utility.rigging import nurbs
 from utility.util import ui
-from utility.setup import outliner, setup
-reload(setup)
+from utility.setup import setup
 
 
 MODULE_PATH = os.path.dirname(__file__)
