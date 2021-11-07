@@ -1,0 +1,102 @@
+//Maya ASCII 2018 scene
+//Name: sphere.ma
+//Last modified: Wed, Nov 03, 2021 11:43:15 PM
+//Codeset: 936
+requires maya "2018";
+requires "mtoa" "3.2.0.2";
+currentUnit -l centimeter -a degree -t film;
+fileInfo "application" "maya";
+fileInfo "product" "Maya 2018";
+fileInfo "version" "2018";
+fileInfo "cutIdentifier" "201706261615-f9658c4cfc";
+fileInfo "osv" "Microsoft Windows 8 Home Premium Edition, 64-bit  (Build 9200)\n";
+createNode transform -n "root";
+	rename -uid "3609093B-47EF-5A13-ECBF-1D9F5781B7FE";
+createNode transform -n "main" -p "root";
+	rename -uid "4ECC6F8B-4DA9-6876-770D-ADA20B4BBDB4";
+createNode nurbsCurve -n "nurbsCircleShape1" -p "main";
+	rename -uid "97721D5F-40A6-BC50-BBC9-4984E263312C";
+	setAttr -k off ".v";
+	setAttr ".cc" -type "nurbsCurve" 
+		3 8 2 no 3
+		13 -2 -1 0 1 2 3 4 5 6 7 8 9 10
+		11
+		0.78361162489122449 4.7982373409884731e-17 -0.7836116248912246
+		6.7857323231109122e-17 6.7857323231109122e-17 -1.1081941875543877
+		-0.78361162489122449 4.7982373409884719e-17 -0.78361162489122438
+		-1.1081941875543881 3.5177356190060272e-33 -5.7448982375248304e-17
+		-0.78361162489122449 -4.7982373409884725e-17 0.78361162489122449
+		-1.1100856969603225e-16 -6.7857323231109171e-17 1.1081941875543884
+		0.78361162489122449 -4.7982373409884719e-17 0.78361162489122438
+		1.1081941875543881 -9.2536792101100989e-33 1.511240500779959e-16
+		0.78361162489122449 4.7982373409884731e-17 -0.7836116248912246
+		6.7857323231109122e-17 6.7857323231109122e-17 -1.1081941875543877
+		-0.78361162489122449 4.7982373409884719e-17 -0.78361162489122438
+		;
+createNode nurbsCurve -n "nurbsCircleShape2" -p "main";
+	rename -uid "7D89EEE6-4896-4FE1-2D4B-10B620FFE326";
+	setAttr -k off ".v";
+	setAttr ".cc" -type "nurbsCurve" 
+		3 8 2 no 3
+		13 -2 -1 0 1 2 3 4 5 6 7 8 9 10
+		11
+		0.78361162489122449 0.7836116248912246 -1.2601436025374907e-16
+		6.7857323231109122e-17 1.1081941875543877 -1.7821121732462095e-16
+		-0.78361162489122449 0.78361162489122438 -1.2601436025374902e-16
+		-1.1081941875543881 5.7448982375248304e-17 -9.2385009758510692e-33
+		-0.78361162489122449 -0.78361162489122449 1.2601436025374905e-16
+		-1.1100856969603225e-16 -1.1081941875543884 1.7821121732462105e-16
+		0.78361162489122449 -0.78361162489122438 1.2601436025374902e-16
+		1.1081941875543881 -1.511240500779959e-16 2.4302600784129146e-32
+		0.78361162489122449 0.7836116248912246 -1.2601436025374907e-16
+		6.7857323231109122e-17 1.1081941875543877 -1.7821121732462095e-16
+		-0.78361162489122449 0.78361162489122438 -1.2601436025374902e-16
+		;
+createNode nurbsCurve -n "nurbsCircleShape3" -p "main";
+	rename -uid "FD90471A-4B44-A451-6119-4EB9CA458761";
+	setAttr -k off ".v";
+	setAttr ".cc" -type "nurbsCurve" 
+		3 8 2 no 3
+		13 -2 -1 0 1 2 3 4 5 6 7 8 9 10
+		11
+		1.2601436025374905e-16 0.78361162489122449 -0.7836116248912246
+		-6.7857323231109109e-17 6.7857323231109134e-17 -1.1081941875543877
+		-2.219791070735185e-16 -0.78361162489122449 -0.78361162489122438
+		-2.4606854055573016e-16 -1.1081941875543881 -5.7448982375248304e-17
+		-1.2601436025374905e-16 -0.78361162489122449 0.78361162489122449
+		6.7857323231109146e-17 -1.1100856969603226e-16 1.1081941875543884
+		2.219791070735185e-16 0.78361162489122449 0.78361162489122438
+		2.4606854055573016e-16 1.1081941875543881 1.511240500779959e-16
+		1.2601436025374905e-16 0.78361162489122449 -0.7836116248912246
+		-6.7857323231109109e-17 6.7857323231109134e-17 -1.1081941875543877
+		-2.219791070735185e-16 -0.78361162489122449 -0.78361162489122438
+		;
+select -ne :time1;
+	setAttr ".o" 1;
+	setAttr ".unw" 1;
+select -ne :hardwareRenderingGlobals;
+	setAttr ".otfna" -type "stringArray" 22 "NURBS Curves" "NURBS Surfaces" "Polygons" "Subdiv Surface" "Particles" "Particle Instance" "Fluids" "Strokes" "Image Planes" "UI" "Lights" "Cameras" "Locators" "Joints" "IK Handles" "Deformers" "Motion Trails" "Components" "Hair Systems" "Follicles" "Misc. UI" "Ornaments"  ;
+	setAttr ".otfva" -type "Int32Array" 22 0 1 1 1 1 1
+		 1 1 1 0 0 0 0 0 0 0 0 0
+		 0 0 0 0 ;
+	setAttr ".fprt" yes;
+select -ne :renderPartition;
+	setAttr -s 2 ".st";
+select -ne :renderGlobalsList1;
+select -ne :defaultShaderList1;
+	setAttr -s 4 ".s";
+select -ne :postProcessList1;
+	setAttr -s 2 ".p";
+select -ne :defaultRenderingList1;
+select -ne :initialShadingGroup;
+	setAttr ".ro" yes;
+select -ne :initialParticleSE;
+	setAttr ".ro" yes;
+select -ne :defaultRenderGlobals;
+	setAttr ".ren" -type "string" "arnold";
+select -ne :defaultResolution;
+	setAttr ".pa" 1;
+select -ne :hardwareRenderGlobals;
+	setAttr ".ctrs" 256;
+	setAttr ".btrs" 512;
+// End of sphere.ma

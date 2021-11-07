@@ -1,0 +1,95 @@
+//Maya ASCII 2018 scene
+//Name: two-direction-curve.ma
+//Last modified: Fri, Nov 05, 2021 10:25:02 PM
+//Codeset: 936
+requires maya "2018";
+requires "mtoa" "3.2.0.2";
+currentUnit -l centimeter -a degree -t film;
+fileInfo "application" "maya";
+fileInfo "product" "Maya 2018";
+fileInfo "version" "2018";
+fileInfo "cutIdentifier" "201706261615-f9658c4cfc";
+fileInfo "osv" "Microsoft Windows 8 Home Premium Edition, 64-bit  (Build 9200)\n";
+createNode transform -n "root";
+	rename -uid "358CACA0-4DFB-605E-5570-D2B09E096285";
+createNode transform -n "main" -p "root";
+	rename -uid "20E720F8-4EBC-372B-49C9-49A8218FDC3C";
+createNode nurbsCurve -n "arrowH01_CTL_shp" -p "main";
+	rename -uid "D6E39A79-49B2-ECDA-C599-D6B69831C9F1";
+	setAttr -k off ".v";
+	setAttr ".cc" -type "nurbsCurve" 
+		1 40 0 no 3
+		41 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
+		 28 29 30 31 32 33 34 35 36 37 38 39 40
+		41
+		0 0 0.98999999999999999
+		-0.19 0.17999999999999999 0.95999999999999996
+		-0.37 0.35999999999999999 0.90000000000000002
+		-0.56000000000000005 0.52000000000000002 0.80000000000000004
+		-0.37 0.52000000000000002 0.80000000000000004
+		-0.19 0.52000000000000002 0.80000000000000004
+		-0.19 0.66000000000000003 0.68000000000000005
+		-0.19 0.77000000000000002 0.53000000000000003
+		-0.19 0.85999999999999999 0.35999999999999999
+		-0.19 0.91000000000000003 0.19
+		-0.19 0.92000000000000004 0
+		-0.19 0.91000000000000003 -0.19
+		-0.19 0.85999999999999999 -0.35999999999999999
+		-0.19 0.77000000000000002 -0.53000000000000003
+		-0.19 0.66000000000000003 -0.68000000000000005
+		-0.19 0.52000000000000002 -0.80000000000000004
+		-0.37 0.52000000000000002 -0.80000000000000004
+		-0.56000000000000005 0.52000000000000002 -0.80000000000000004
+		-0.37 0.35999999999999999 -0.90000000000000002
+		-0.19 0.17999999999999999 -0.95999999999999996
+		0 0 -0.98999999999999999
+		0.19 0.17999999999999999 -0.95999999999999996
+		0.37 0.35999999999999999 -0.90000000000000002
+		0.56000000000000005 0.52000000000000002 -0.80000000000000004
+		0.37 0.52000000000000002 -0.80000000000000004
+		0.19 0.52000000000000002 -0.80000000000000004
+		0.19 0.66000000000000003 -0.68000000000000005
+		0.19 0.77000000000000002 -0.53000000000000003
+		0.19 0.85999999999999999 -0.35999999999999999
+		0.19 0.91000000000000003 -0.19
+		0.19 0.92000000000000004 0
+		0.19 0.91000000000000003 0.19
+		0.19 0.85999999999999999 0.35999999999999999
+		0.19 0.77000000000000002 0.53000000000000003
+		0.19 0.66000000000000003 0.68000000000000005
+		0.19 0.52000000000000002 0.80000000000000004
+		0.37 0.52000000000000002 0.80000000000000004
+		0.56000000000000005 0.52000000000000002 0.80000000000000004
+		0.37 0.35999999999999999 0.90000000000000002
+		0.19 0.17999999999999999 0.95999999999999996
+		0 0 0.98999999999999999
+		;
+select -ne :time1;
+	setAttr ".o" 1;
+	setAttr ".unw" 1;
+select -ne :hardwareRenderingGlobals;
+	setAttr ".otfna" -type "stringArray" 22 "NURBS Curves" "NURBS Surfaces" "Polygons" "Subdiv Surface" "Particles" "Particle Instance" "Fluids" "Strokes" "Image Planes" "UI" "Lights" "Cameras" "Locators" "Joints" "IK Handles" "Deformers" "Motion Trails" "Components" "Hair Systems" "Follicles" "Misc. UI" "Ornaments"  ;
+	setAttr ".otfva" -type "Int32Array" 22 0 1 1 1 1 1
+		 1 1 1 0 0 0 0 0 0 0 0 0
+		 0 0 0 0 ;
+	setAttr ".fprt" yes;
+select -ne :renderPartition;
+	setAttr -s 2 ".st";
+select -ne :renderGlobalsList1;
+select -ne :defaultShaderList1;
+	setAttr -s 4 ".s";
+select -ne :postProcessList1;
+	setAttr -s 2 ".p";
+select -ne :defaultRenderingList1;
+select -ne :initialShadingGroup;
+	setAttr ".ro" yes;
+select -ne :initialParticleSE;
+	setAttr ".ro" yes;
+select -ne :defaultRenderGlobals;
+	setAttr ".ren" -type "string" "arnold";
+select -ne :defaultResolution;
+	setAttr ".pa" 1;
+select -ne :hardwareRenderGlobals;
+	setAttr ".ctrs" 256;
+	setAttr ".btrs" 512;
+// End of two-direction-curve.ma
