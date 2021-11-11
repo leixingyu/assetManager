@@ -61,11 +61,6 @@ class Asset(object):
 
     @classmethod
     def list_from_dir(cls, directory=ASSET_PATH):
-        """
-
-        :param directory:
-        :return: list. asset short names
-        """
         asset_files = list()
         files = os.listdir(directory)
         for f in files:

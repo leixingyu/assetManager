@@ -22,7 +22,6 @@ c.load(name='testCircle')
 
 
 class Shape(asset.Asset):
-
     # every shape asset should have the same offset group and transform name
     offset = 'root'
     transform = 'main'

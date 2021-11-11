@@ -1,21 +1,18 @@
 import logging
 import os
 
-import maya.cmds as cmds
-
 import asset
 import createEntryUI
-from utility._vendor.Qt import QtWidgets, QtCore, QtGui
-from utility._vendor.Qt import _loadUi
+
+from Qt import QtWidgets, QtCore, QtGui
+from Qt import _loadUi
 from utility.util import ui
 
 
 MODULE_PATH = os.path.dirname(__file__)
-UI_FILE = r'ui/asset.ui'
+UI_FILE = os.path.join('ui', 'asset.ui')
 
 ICON_SIZE = 220
-
-# TODO: get rid of selection save mode
 
 
 class AssetManagerUI(QtWidgets.QMainWindow):

@@ -1,4 +1,4 @@
-from utility._vendor.Qt import QtWidgets, QtCore, QtGui
+from Qt import QtWidgets, QtCore, QtGui
 
 
 class CreateEntryDialog(QtWidgets.QDialog):

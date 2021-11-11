@@ -1,9 +1,10 @@
 //Maya ASCII 2018 scene
 //Name: beak.ma
-//Last modified: Thu, Nov 04, 2021 11:56:18 PM
+//Last modified: Wed, Nov 10, 2021 10:48:20 PM
 //Codeset: 936
 requires maya "2018";
 requires "mtoa" "3.2.0.2";
+requires "stereoCamera" "10.0";
 requires "stereoCamera" "10.0";
 currentUnit -l centimeter -a degree -t film;
 fileInfo "application" "maya";
@@ -11,14 +12,13 @@ fileInfo "product" "Maya 2018";
 fileInfo "version" "2018";
 fileInfo "cutIdentifier" "201706261615-f9658c4cfc";
 fileInfo "osv" "Microsoft Windows 8 Home Premium Edition, 64-bit  (Build 9200)\n";
-createNode transform -n "root";
-	rename -uid "6B1039B9-4680-B0A0-D4E6-3ABCE23D1983";
-createNode transform -n "main" -p "root";
-	rename -uid "A25F9801-4AE2-418E-2328-0995BF49B963";
-createNode nurbsCurve -n "aa" -p "|root|main";
+createNode transform -n "root1";
+	rename -uid "9E759AB3-4563-492A-C7E0-A7B4DE2BFF1B";
+createNode transform -n "main" -p "root1";
+	rename -uid "FBDEAEC3-4DAE-ECF6-9DA6-5C88320E9D13";
+createNode nurbsCurve -n "aa" -p "|root1|main";
 	rename -uid "A466C24E-4480-7788-2D67-3B8D50F782F4";
 	setAttr -k off ".v";
-	setAttr ".ove" yes;
 	setAttr ".ovc" 17;
 	setAttr ".cc" -type "nurbsCurve" 
 		3 8 2 no 3
@@ -64,6 +64,4 @@ select -ne :defaultResolution;
 select -ne :hardwareRenderGlobals;
 	setAttr ".ctrs" 256;
 	setAttr ".btrs" 512;
-select -ne :ikSystem;
-	setAttr -s 4 ".sol";
 // End of beak.ma

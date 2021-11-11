@@ -4,15 +4,16 @@ import os
 import shape
 import createEntryUI
 
-from utility._vendor.Qt import QtWidgets, QtCore, QtGui
-from utility._vendor.Qt import _loadUi
+from Qt import QtWidgets, QtCore, QtGui
+from Qt import _loadUi
+
 from utility.rigging import nurbs
 from utility.util import ui
 from utility.setup import setup
 
 
 MODULE_PATH = os.path.dirname(__file__)
-UI_FILE = r'ui/shape.ui'
+UI_FILE = os.path.join('ui', 'shape.ui')
 
 
 class ShapeManagerUI(QtWidgets.QMainWindow):
