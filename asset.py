@@ -3,6 +3,7 @@ import os
 
 import util
 
+
 # this is the root where the tool tries to find all the assets and screenshots
 # either hard code the full path or use env variable to set it
 ROOT_PATH = ''
