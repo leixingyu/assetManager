@@ -1,3 +1,9 @@
-[submodule "utility"]
-	path = utility
-	url = https://github.com/leixingyu/maya-utility.git
+[submodule "guiUtil"]
+	path = guiUtil
+	url = https://github.com/leixingyu/guiUtil
+[submodule "mayaUtil"]
+	path = mayaUtil
+	url = git@github.com:leixingyu/mayaUtil.git
+[submodule "pipelineUtil"]
+	path = pipelineUtil
+	url = git@github.com:leixingyu/pipelineUtil.git
