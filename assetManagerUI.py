@@ -1,16 +1,16 @@
 import logging
 import os
 
-import asset
-import createEntryUI
-
 from Qt import QtWidgets, QtCore, QtGui
 from Qt import _loadUi
-from utility.util import ui
+from guiUtil import prompt
+from guiUtil.template import getTextDialog
+
+import asset
 
 
 MODULE_PATH = os.path.dirname(__file__)
-UI_FILE = os.path.join('ui', 'asset.ui')
+UI_FILE = os.path.join(MODULE_PATH, 'assetManager.ui')
 
 ICON_SIZE = 220
 
@@ -19,7 +19,7 @@ class AssetManagerUI(QtWidgets.QMainWindow):
 
     def __init__(self, directory=asset.ASSET_PATH):
         super(AssetManagerUI, self).__init__()
-        _loadUi(os.path.join(MODULE_PATH, UI_FILE), self)
+        _loadUi(UI_FILE, self)
 
         self._dir = directory
         self._props = None
@@ -61,6 +61,7 @@ class AssetManagerUI(QtWidgets.QMainWindow):
     def force_refresh(self):
         self.get_props()
         self.populate()
+        self.ui_info_widget.clear()
 
     def display_detail(self):
         self.ui_info_widget.clear()
@@ -68,9 +69,9 @@ class AssetManagerUI(QtWidgets.QMainWindow):
         item = self.ui_list_widget.currentItem()
         prop = item.data(QtCore.Qt.UserRole)
 
-        if prop.screenshot:
+        if prop.thumbnail:
             thumbnail = QtWidgets.QListWidgetItem()
-            thumbnail.setIcon(QtGui.QIcon(prop.screenshot))
+            thumbnail.setIcon(QtGui.QIcon(prop.thumbnail))
             self.ui_info_widget.addItem(thumbnail)
 
         if prop.name:
@@ -94,33 +95,33 @@ class AssetManagerUI(QtWidgets.QMainWindow):
     def open(self, item=None):
         if not item:
             item = self.get_current_item()
-        item.open()
+        item.fopen()
 
     def load(self, item=None):
         if not item:
             item = self.get_current_item()
-        item.load()
+        item.fimport()
 
     def create_entry(self):
-        dialog = createEntryUI.CreateEntryDialog()
+        dialog = getTextDialog.GetTextDialog()
         if dialog.exec_():
-            name = dialog.get_name()
-            item = asset.Asset.save(name, self._dir)
+            name = dialog.get_text()
+            item = asset.Asset.fsave(os.path.join(self._dir, name))
 
         self.force_refresh()
-        ui.prompt_message_log("Creation Success", ltype='info')
+        prompt.message_log("Creation Success", ltype='info')
 
     def delete_entry(self):
         item = self.get_current_item()
 
-        user_choice = ui.prompt_message_choose(
+        user_choice = prompt.message_yesno(
             "Delete the entry: {}?".format(item.name))
         if user_choice == QtWidgets.QMessageBox.No:
             return
 
         # delete the prop entry
         try:
-            item.delete()
+            item.fdelete()
         except Exception as e:
             logging.error("deletion interrupted: %s", e)
 
