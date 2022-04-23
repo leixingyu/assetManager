@@ -6,15 +6,11 @@ Create, save, delete assets for personal projects.
 
 ### Getting Started
 
-1. Unzip the snap-tool package under 
+1. Download and unzip the [asset-manager package](https://github.com/leixingyu/assetManager/releases/tag/v1.0.0) under 
 `%USERPROFILE%/Documents/maya/[current maya version]/scripts/` 
 or a custom directory under `PYTHONPATH` env variable.
 
-
-2. Rename the package to **assetManager**
-
-
-3. Launch through script editor:
+2. Launch through script editor:
 
     ```python
     from assetManager import assetManagerUI
@@ -30,7 +26,7 @@ python qt bindings (Only needed if you need UI support functionalities)
     ```
 
 Already packaged dependencies with locked version of the following,
-but you will need to clone using `git clone --recursive`
+but you could also manually clone the latest version using `git clone --recursive`
 
 
 - [pipelineUtil](https://github.com/leixingyu/pipelineUtil)
